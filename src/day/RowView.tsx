@@ -3,7 +3,7 @@ import css from './styles.module.css';
 import { formatDuration } from '../lib/formatDuration';
 import { Button } from '../shared/Button';
 import { Tag } from '../shared/Tag';
-import {IActivity, ITimeEntry,IUserSettingsProps} from '../react-app-env';
+import { IActivity, ITimeEntry, IUserSettingsProps } from '../react-app-env';
 
 interface IProps {
   activityList: IActivity[];
@@ -46,12 +46,14 @@ export default class RowView extends React.PureComponent<IProps> {
           role="button"
           tabIndex={0}
           className={css.colTime}
-          onClick={() => this.props.onEditClick(timeEntry._id,'') }
-          onKeyDown={(ev) => ev.key === 'Enter'}
+          onClick={() => this.props.onEditClick(timeEntry._id, '')}
+          onKeyDown={({ keyCode }) => {
+            if (keyCode === 13) {
+              this.props.onEditClick(timeEntry._id, '');
+            }
+          }}
         >
-          <div className={css.cellOnClick}>
-            {timeStamp}
-          </div>
+          <div className={css.cellOnClick}>{timeStamp}</div>
         </div>
         <div className={css.colDuration}>
           {duration > 0 ? formatDuration(duration) : ''}
@@ -61,7 +63,12 @@ export default class RowView extends React.PureComponent<IProps> {
             role="button"
             tabIndex={0}
             className={css.cellOnClick}
-            onClick={() => this.props.onEditClick(timeEntry._id,'task') }
+            onClick={() => this.props.onEditClick(timeEntry._id, 'task')}
+            onKeyDown={({ keyCode }) => {
+              if (keyCode === 13) {
+                this.props.onEditClick(timeEntry._id, 'task');
+              }
+            }}
           >
             {timeEntry.taskName ? timeEntry.taskName : 'Untracked time'}
           </div>
@@ -70,7 +77,12 @@ export default class RowView extends React.PureComponent<IProps> {
               role="button"
               tabIndex={0}
               className={css.cellOnClick}
-              onClick={() => this.props.onEditClick(timeEntry._id,'comment') }
+              onClick={() => this.props.onEditClick(timeEntry._id, 'comment')}
+              onKeyDown={({ keyCode }) => {
+                if (keyCode === 13) {
+                  this.props.onEditClick(timeEntry._id, 'comment');
+                }
+              }}
               style={{
                 color: '#999',
                 padding: '2px 0 3px 3px',
@@ -79,13 +91,16 @@ export default class RowView extends React.PureComponent<IProps> {
               {timeEntry.comment}
             </div>
           )}
-          {this.renderRedminePart(timeEntry, activity)}
+          {this.renderRedminePart(timeEntry)}
         </div>
         <div className={css.colAction}>
-          <Button type="edit" onClick={() => this.props.onEditClick(timeEntry._id, '')}>
+          <Button
+            type="edit"
+            onClick={() => this.props.onEditClick(timeEntry._id, '')}
+          >
             Edit
           </Button>
-          <Button type="remove" disabled async onClick={() => void(0)}>
+          <Button type="remove" disabled async onClick={() => void 0}>
             Remove
           </Button>
         </div>
@@ -94,9 +109,7 @@ export default class RowView extends React.PureComponent<IProps> {
   }
 
   private renderRedminePart(
-    timeEntry: ITimeEntry,
-    activity: IActivity | null | undefined,
-    onEditClick?: (focusId: string) => void
+    timeEntry: ITimeEntry
   ) {
     if (!timeEntry.externalData) {
       return null;
