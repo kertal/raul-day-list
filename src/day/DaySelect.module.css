@@ -1,0 +1,21 @@
+.daySelect {
+  background: transparent;
+  border-radius: 3px;
+  border: 1px dotted #fff;
+  color: white;
+  font-size: 1em;
+  height: 1em;
+  line-height: 1em;
+  padding: 2px 0 0 5px;
+  margin-left: 0.5em;
+  text-align: left;
+  vertical-align: top;
+  width: 125px;
+}
+
+.daySelect::-webkit-calendar-picker-indicator,
+.daySelect::-webkit-inner-spin-button,
+.daySelect::-webkit-outer-spin-button {
+  opacity: 1;
+  -webkit-appearance: none;
+}

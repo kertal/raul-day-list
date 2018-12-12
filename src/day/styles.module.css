@@ -1,0 +1,111 @@
+
+.sectionSum{
+    background-color: rgba(0,0,0,0.04);
+}
+
+.sectionSumSelect{
+    background: transparent;
+    border: 1px dotted #999;
+    width: 80px;
+    margin-bottom: 0;
+    margin-top: -1px;
+}
+
+.row {
+    border-bottom: 1px dotted #ccc;
+    color: #000;
+    display: flex;
+    padding-bottom: 3px;
+    padding-top: 3px;
+}
+
+.rowNoActivities {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-left: 0.5em;
+}
+
+.headerRow {
+    display: flex;
+    border-bottom: 1px dotted #ccc;
+    color: #999;
+    font-size: 0.8em;
+    padding-bottom: 3px;
+    padding-top: 3px;
+    text-transform: uppercase;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 1fr;
+    width: 100%;
+    height: 100%;
+}
+
+.body {
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+.col1 {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 1px 3px;
+}
+
+.colDuration {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 1px 3px;
+    min-width: 80px;
+    max-width: 80px;
+}
+
+.colAction {
+    width: 170px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 1px 3px;
+}
+
+.colIcon {
+    padding: 0;
+    padding-left: 1em;
+    min-width: 16px;
+    max-width: 16px;
+}
+
+.colTime {
+    flex: 1;
+    min-width: 80px;
+    overflow: hidden;
+    padding: 1px 3px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.colTask {
+    flex: 8;
+    word-wrap: break-word;
+    padding-right: 10px;
+    min-width: 0;
+}
+.colTask span{
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.cellOnClick {
+    border: 1px solid transparent;
+    padding: 0 7px 3px 3px;
+    cursor: pointer;
+}
+
+.cellOnClick:hover {
+    border: 1px solid blue;
+}
+

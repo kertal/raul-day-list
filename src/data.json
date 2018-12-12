@@ -1,0 +1,233 @@
+{
+  "timeEntryList": [
+    {
+      "_id": "f6156e3a-88ae-4c2d-afeb-a66a2cc5851a",
+      "activityId": "14",
+      "comment": "23",
+      "duration": 8700,
+      "taskId": "redmine-411106",
+      "taskName": "Make React work in IE6",
+      "timestamp": "2018-12-10T19:00:00.000Z",
+      "externalData": {
+        "issueId": 411106,
+        "syncState": "PENDING"
+      }
+    },
+    {
+      "_id": "eceb533e-d5fa-45d5-a459-f7bee56a5f36",
+      "activityId": "14",
+      "comment": "comment",
+      "duration": 10800,
+      "taskId": "redmine-410136",
+      "taskName": "React.js in Turbo Pascal PoC",
+      "timestamp": "2018-12-10T21:25:00.000Z",
+      "externalData": {
+        "issueId": 410136,
+        "syncState": "PENDING"
+      }
+    },
+    {
+      "_id": "f6156e3a-88ae-4c2d-afeb-a66a2cc5851a",
+      "activityId": "14",
+      "comment": "this will be challenging",
+      "duration": 64800,
+      "taskId": "redmine-411106",
+      "taskName": "Make React work in IE6",
+      "timestamp": "2018-12-11T00:25:00.000Z",
+      "externalData": {
+        "issueId": 411106,
+        "syncState": "PENDING"
+      }
+    },
+    {
+      "_id": "f6156e3a-88ae-4c2d-afeb-a66a2cc5851b",
+      "activityId": "",
+      "comment": "",
+      "duration": -1,
+      "timestamp": "2018-12-11T18:25:00.000Z"
+    },
+    {
+      "_id": "f6156e3a-88ae-4c2d-afeb-a66a2cc5851c",
+      "comment": "Diving into Perl again",
+      "duration": 10800,
+      "taskId": "1",
+      "taskName": "React in Perl PoC",
+      "timestamp": "2018-12-12T08:25:00.000Z"
+    },
+    {
+      "_id": "f6156e3a-88ae-4c2d-afeb-a66a2cc5851d",
+      "duration": -1,
+      "timestamp": "2018-12-12T11:25:00.000Z"
+    },
+    {
+      "_id": "f6156e3a-88ae-4c2d-afeb-a66a2cc5851e",
+      "activityId": "14",
+      "comment": "Diving into Perl again",
+      "duration": -1,
+      "taskId": "1",
+      "taskName": "React in Perl PoC",
+      "timestamp": "2018-12-12T12:25:00.000Z"
+    }
+  ],
+  "taskList": [
+    {
+      "_id": "redmine-411106",
+      "active": true,
+      "subject": "Make React work in IE6",
+      "type": "redmine",
+      "externalData": {
+        "id": 411106,
+        "project": {
+          "id": 646,
+          "name": "Tracer"
+        },
+        "tracker": {
+          "id": 1,
+          "name": "Bug"
+        },
+        "subject": "Make React work in IE6",
+        "start_date": "2018-10-08",
+        "due_date": "2019-03-30",
+        "done_ratio": 0,
+        "created_on": "2018-10-08T10:58:06Z",
+        "updated_on": "2018-10-22T09:19:58Z"
+      }
+    },
+    {
+      "_id": "1",
+      "active": true,
+      "subject": "React in Perl PoC",
+      "type": "internal"
+    },
+    {
+      "_id": "redmine-410136",
+      "active": true,
+      "subject": "React.js in Turbo Pascal PoC ",
+      "type": "redmine",
+      "externalData": {
+        "id": 410136,
+        "project": {
+          "id": 646,
+          "name": "Tracer"
+        },
+        "subject": "React.js in Turbo Pascal PoC ",
+        "start_date": "2018-06-04",
+        "due_date": "2019-03-30",
+        "done_ratio": 0,
+        "estimated_hours": 8,
+        "created_on": "2018-06-04T14:47:39Z",
+        "updated_on": "2018-10-22T09:19:55Z"
+      }
+    }
+  ],
+  "activityList": [
+    {
+      "id": "8",
+      "name": "Design"
+    },
+    {
+      "id": "58",
+      "name": "Analyze"
+    },
+    {
+      "id": "9",
+      "name": "Development"
+    },
+    {
+      "id": "10",
+      "name": "Bugfixing"
+    },
+    {
+      "id": "32",
+      "name": "Implementation"
+    },
+    {
+      "id": "34",
+      "name": "Effort Estimation"
+    },
+    {
+      "id": "12",
+      "name": "Testing"
+    },
+    {
+      "id": "11",
+      "name": "Support"
+    },
+    {
+      "id": "14",
+      "name": "Admin & Meetings"
+    },
+    {
+      "id": "38",
+      "name": "Planning / Engineering"
+    },
+    {
+      "id": "40",
+      "name": "Test"
+    },
+    {
+      "id": "42",
+      "name": "Release Planning"
+    },
+    {
+      "id": "44",
+      "name": "Installation"
+    },
+    {
+      "id": "46",
+      "name": "Commissioning"
+    },
+    {
+      "id": "48",
+      "name": "Project Management"
+    },
+    {
+      "id": "50",
+      "name": "Documentation"
+    },
+    {
+      "id": "52",
+      "name": "Feature Evaluation"
+    },
+    {
+      "id": "54",
+      "name": "Internal Acceptance"
+    },
+    {
+      "id": "56",
+      "name": "Consulting"
+    },
+    {
+      "id": "114",
+      "name": "Administration"
+    },
+    {
+      "id": "116",
+      "name": "Project Specification"
+    },
+    {
+      "id": "118",
+      "name": "Review"
+    },
+    {
+      "id": "120",
+      "name": "Customer Meetings"
+    },
+    {
+      "id": "146",
+      "name": "Know How"
+    },
+    {
+      "id": "254",
+      "name": "Software Update"
+    },
+    {
+      "id": "256",
+      "name": "Training"
+    }
+  ],
+  "settings": {
+    "redmineUri": "",
+    "defaultTimeUnitInMin": 5
+  }
+}
