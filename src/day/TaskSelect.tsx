@@ -1,58 +1,31 @@
-// note: refactoring of the Task Select used in RowEdit for better modularisation
 import * as React from 'react';
 import Select from 'react-select/lib/Creatable';
 import { ValueType } from 'react-select/lib/types';
-import { Task, TimeEntry } from '../react-app-env';
+import { Task } from '../react-app-env';
 
 interface Props {
-  onChangeTask: (task: any) => void;
-  task?: Task;
+  focus: boolean;
+  onChangeTask: (taskId: string, taskName: string) => void;
+  taskId?: string;
   taskList: Task[];
-  timeEntry: TimeEntry;
 }
 
-interface State {
-  activityId: string;
-  task?: Task;
-  taskId: string;
-  taskName: string;
-}
-
-export class TaskSelect extends React.Component<Props, State> {
-  public static defaultProps = {
-    focusField: '',
-    style: {},
-  };
+export class TaskSelect extends React.PureComponent<Props> {
   private taskInput = React.createRef<
     Select<{ label: string; value: string }>
   >();
 
-  constructor(props: Props) {
-    super(props);
-    const timeEntry = props.timeEntry || {};
-
-    this.state = {
-      activityId: '',
-      task: props.task,
-      taskId: timeEntry.taskId ? timeEntry.taskId : '',
-      taskName: '',
-    };
-  }
-
   public componentDidMount() {
-    if (this.focus) {
+    if (this.props.focus) {
       this.focus();
     }
   }
 
   public render() {
     const options = this.getOptions();
-    const selectedTask = this.state.taskId
-      ? options.find(t => t.value === this.state.taskId)
+    const selectedTask = this.props.taskId
+      ? options.find(t => t.value === this.props.taskId)
       : options[0];
-
-    // an expanding text area for the comments might be an option
-    // https://alistapart.com/article/expanding-text-areas-made-elegant
 
     return (
       <Select
@@ -97,7 +70,7 @@ export class TaskSelect extends React.Component<Props, State> {
    * Explicitly focus inputs using the raw DOM API
    * Note: we're accessing "current" to get the DOM node
    */
-  private focus() {
+  public focus() {
     const taskInput = this.taskInput.current!;
     return taskInput.focus();
   }
@@ -108,9 +81,6 @@ export class TaskSelect extends React.Component<Props, State> {
       value: t._id,
     }));
 
-    if (this.state.taskId === 'new') {
-      options.push({ value: 'new', label: this.state.taskName });
-    }
     options = options.sort((a, b) => (a.label > b.label ? 1 : -1));
     options.unshift({ value: '', label: '- (Untracked Time)' });
     return options;
@@ -128,31 +98,10 @@ export class TaskSelect extends React.Component<Props, State> {
       newValue = newValue[0];
     }
 
-    const state: {
-      activityId: string;
-      taskId: string;
-      taskName: string;
-      task?: Task;
-    } = {
-      activityId: this.state.activityId,
-      taskId: '',
-      taskName: '',
-    };
-
     if (actionMeta.action === 'create-option') {
-      state.taskId = 'new';
-      state.taskName = newValue.label.substring(0, 124);
-      state.activityId = '';
+      this.props.onChangeTask('new', newValue.label.substring(0, 124));
     } else {
-      state.taskId = newValue.value;
-      if (state.taskId && typeof this.props.onChangeTask === 'function') {
-        const task = await this.props.onChangeTask(state.taskId);
-        if (typeof task === 'object') {
-          state.task = task;
-        }
-      }
+      this.props.onChangeTask(newValue.value, '');
     }
-    this.props.onChangeTask(state);
-
   };
 }
