@@ -1,19 +1,19 @@
 import * as React from 'react';
 import css from './styles.module.css';
-import { ITask,ITimeEntry} from '../react-app-env';
+import { Task,TimeEntry} from '../react-app-env';
 import { formatDuration } from '../lib/formatDuration';
 import { sumDuration } from '../lib/sumDuration';
 import {sumDurationByTaskId} from '../lib/sumDurationsByTask';
 
-interface IProps {
-  timeEntryList: ITimeEntry[];
+interface Props {
+  timeEntryList: TimeEntry[];
 }
 
-interface IState {
+interface State {
   showDetails: boolean;
 }
 
-export default class RowSum extends React.Component<IProps, IState> {
+export default class RowSum extends React.Component<Props, State> {
   public state = {
     showDetails: false,
   };
@@ -32,7 +32,7 @@ export default class RowSum extends React.Component<IProps, IState> {
   }
   private handleSelectChange = (ev: React.SyntheticEvent<HTMLSelectElement>) => {
     this.setState({ showDetails: ev.currentTarget.value === 'totalByTask' });
-  }
+  };
 
   private renderSelect() {
     return (
@@ -47,11 +47,11 @@ export default class RowSum extends React.Component<IProps, IState> {
     );
   }
 
-  private renderDetails(sumByTask: Map<string, ITask>) {
+  private renderDetails(sumByTask: Map<string, Task>) {
     return Array.from(sumByTask.values()).map(this.renderDetailsTask);
   }
 
-  private renderDetailsTask = (task: ITask, idx: number) => (
+  private renderDetailsTask = (task: Task, idx: number) => (
     <div className={css.row} key={task._id}>
       <div className={css.colIcon}>
         {idx === 0 && (
@@ -67,7 +67,7 @@ export default class RowSum extends React.Component<IProps, IState> {
       <div className={css.colTask}>{task.taskName}</div>
       <div className={css.colAction} />
     </div>
-  )
+  );
 
   private renderSummary(sum: string) {
     return (

@@ -4,35 +4,26 @@ import Select from 'react-select/lib/Creatable';
 import css from './styles.module.css';
 import { Button } from '../shared/Button';
 import { ValueType } from 'react-select/lib/types';
-import { IActivity, ITask, ITimeEntry } from '../react-app-env';
-
-export interface ITimeEntryPersist {
-  _id: string;
-  activityId: string;
-  comment: string;
-  taskId: string;
-  taskName: string;
-  timestamp: string;
-}
+import { Activity, Task, TimeEntry, TimeEntryPersist } from '../react-app-env';
 
 interface IProps {
-  activityList: IActivity[];
+  activityList: Activity[];
   focusField?: string;
-  onChangeTask?: (taskId: string) => ITask;
+  onChangeTask?: (taskId: string) => Task;
   onRemoveClick?: () => void;
   onSaveClick: (
-    newTimeEntry: ITimeEntryPersist,
-    prevTimeEntry: ITimeEntry
+    newTimeEntry: TimeEntryPersist,
+    prevTimeEntry: TimeEntry
   ) => void;
-  task?: ITask;
-  taskList: ITask[];
-  timeEntry: ITimeEntry;
+  task?: Task;
+  taskList: Task[];
+  timeEntry: TimeEntry;
 }
 
 interface IState {
   comment: string;
   timestamp: string;
-  task?: ITask;
+  task?: Task;
   taskId: string;
   taskName: string;
   activityId: string;
@@ -180,7 +171,7 @@ export class RowEdit extends React.Component<IProps, IState> {
     }),
   });
 
-  private getActivityId(timeEntry: ITimeEntry, activityList: IActivity[]) {
+  private getActivityId(timeEntry: TimeEntry, activityList: Activity[]) {
     if (timeEntry && timeEntry.activityId) {
       return String(timeEntry.activityId);
     }
@@ -274,7 +265,7 @@ export class RowEdit extends React.Component<IProps, IState> {
       activityId: string;
       taskId: string;
       taskName: string;
-      task?: ITask;
+      task?: Task;
     } = {
       activityId: this.state.activityId,
       taskId: '',

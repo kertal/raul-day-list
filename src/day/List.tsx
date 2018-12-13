@@ -3,29 +3,29 @@ import css from './styles.module.css';
 import { ActionBar } from './ActionBar';
 import RowSum from './RowSum';
 import {
-  IActivity,
-  ITask,
-  ITimeEntry,
-  IUserSettingsProps,
+  Activity,
+  Task,
+  TimeEntry,
+  UserSettingsProps,
 } from '../react-app-env';
 import RowView from './RowView';
 import { RowEdit } from './RowEdit';
 
-interface IProps {
-  activityList: IActivity[];
+interface Props {
+  activityList: Activity[];
   date: number;
-  settings: IUserSettingsProps;
-  taskList: ITask[];
-  timeEntryList: ITimeEntry[];
+  settings: UserSettingsProps;
+  taskList: Task[];
+  timeEntryList: TimeEntry[];
 }
 
-interface IState {
+interface State {
   editFocusFieldId: string;
   editId: string;
-  editTask: ITask | null;
+  editTask: Task | null;
 }
 
-export class List extends React.Component<IProps, IState> {
+export class List extends React.Component<Props, State> {
   public state = {
     editFocusFieldId: '',
     editId: '',
@@ -74,7 +74,7 @@ export class List extends React.Component<IProps, IState> {
     );
   }
 
-  private renderRow(timeEntry: ITimeEntry) {
+  private renderRow(timeEntry: TimeEntry) {
     const edit = this.state.editId && this.state.editId === timeEntry._id;
 
     if (edit) {
@@ -84,7 +84,7 @@ export class List extends React.Component<IProps, IState> {
     }
   }
 
-  private renderViewRow(timeEntry: ITimeEntry) {
+  private renderViewRow(timeEntry: TimeEntry) {
     const disabled = !!this.state.editId && this.state.editId !== timeEntry._id;
     const handleEditClick = (id: string, focusId: string) =>
       this.setState(() => ({ editId: id, editFocusFieldId: focusId }));
@@ -101,7 +101,7 @@ export class List extends React.Component<IProps, IState> {
     );
   }
 
-  private renderEditRow(timeEntry: ITimeEntry) {
+  private renderEditRow(timeEntry: TimeEntry) {
     return (
       <RowEdit
         activityList={this.props.activityList}

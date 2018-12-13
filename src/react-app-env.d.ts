@@ -1,6 +1,6 @@
 /// <reference types="react-scripts" />
 
-declare interface ITask {
+declare interface Task {
   _id: string;
   active: boolean;
   activityInput?: {
@@ -15,7 +15,7 @@ declare interface ITask {
   type: string;
 }
 
-declare interface ITimeEntry {
+declare interface TimeEntry {
   _id: string;
   _rev?: string;
   activityId?: string;
@@ -27,7 +27,7 @@ declare interface ITimeEntry {
   timestamp: string;
 }
 
-export interface ITimeEntryPersist {
+export interface TimeEntryPersist {
   _id: string;
   activityId: string;
   comment: string;
@@ -36,14 +36,14 @@ export interface ITimeEntryPersist {
   timestamp: string;
 }
 
-declare interface IUserSettingsProps {
+declare interface UserSettingsProps {
   redmineEnabled?: boolean;
   redmineUri?: string;
   redmineToken?: string;
   defaultTimeUnitInMin?: number;
 }
 
-export interface IActivity {
+export interface Activity {
   id: string;
   name: string;
 }

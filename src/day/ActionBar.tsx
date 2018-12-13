@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Button } from '../shared/Button';
-import { ITimeEntry } from '../react-app-env';
+import { TimeEntry } from '../react-app-env';
 
-interface IProps {
+interface Props {
   disabled: boolean;
-  timeEntryList: ITimeEntry[];
+  timeEntryList: TimeEntry[];
 }
 
-export class ActionBar extends React.PureComponent<IProps> {
+export class ActionBar extends React.PureComponent<Props> {
   public render() {
     const { timeEntryList } = this.props;
     const lastEntry = timeEntryList[timeEntryList.length - 1];

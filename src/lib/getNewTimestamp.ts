@@ -1,4 +1,4 @@
-import {ITimeEntry} from '../react-app-env';
+import {TimeEntry} from '../react-app-env';
 
 /**
  * returns initial timestamp of a new time entry
@@ -12,7 +12,7 @@ import {ITimeEntry} from '../react-app-env';
  */
 export function getNewTimestamp(
   date: number,
-  timeEntryList: ITimeEntry[] = [],
+  timeEntryList: TimeEntry[] = [],
   defaultTimeUnitInMin: number = 1,
   nowTime: number = 0
 ) {

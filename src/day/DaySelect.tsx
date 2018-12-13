@@ -2,12 +2,12 @@ import * as React from 'react';
 import css from './DaySelect.module.css';
 import { formatDate } from '../lib/formatDate';
 
-interface IProps {
+interface Props {
   date: number;
   onChange: (sec: number) => void;
 }
 
-export class DaySelect extends React.PureComponent<IProps> {
+export class DaySelect extends React.PureComponent<Props> {
   public render() {
     const d = new Date(this.props.date);
     const dayname = d.toLocaleString(window.navigator.language, {

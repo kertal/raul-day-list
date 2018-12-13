@@ -2,21 +2,21 @@ import * as React from 'react';
 import { DaySelect } from './DaySelect';
 import { List } from './List';
 import { Page } from '../shared/Page';
-import {IActivity, ITask, ITimeEntry} from '../react-app-env';
+import {Activity, Task, TimeEntry} from '../react-app-env';
 
 interface IProps {
-  activityList: IActivity[],
+  activityList: Activity[],
   settings: {},
-  taskList: ITask[],
-  timeEntryList: ITimeEntry[],
+  taskList: Task[],
+  timeEntryList: TimeEntry[],
 }
 
 interface IState {
-  activityList: IActivity[],
+  activityList: Activity[],
   date: number;
   settings: {},
-  taskList: ITask[],
-  timeEntryList: ITimeEntry[]
+  taskList: Task[],
+  timeEntryList: TimeEntry[]
 }
 
 class Day extends React.Component<IProps, IState> {

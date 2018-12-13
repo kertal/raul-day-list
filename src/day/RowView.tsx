@@ -3,18 +3,18 @@ import css from './styles.module.css';
 import { formatDuration } from '../lib/formatDuration';
 import { Button } from '../shared/Button';
 import { Tag } from '../shared/Tag';
-import { IActivity, ITimeEntry, IUserSettingsProps } from '../react-app-env';
+import { Activity, TimeEntry, UserSettingsProps } from '../react-app-env';
 
-interface IProps {
-  activityList: IActivity[];
+interface Props {
+  activityList: Activity[];
   disabled: boolean;
   onEditClick: (id: string, focusId: string) => void;
-  settings: IUserSettingsProps;
+  settings: UserSettingsProps;
   style?: React.StyleHTMLAttributes<any>;
-  timeEntry: ITimeEntry;
+  timeEntry: TimeEntry;
 }
 
-export default class RowView extends React.PureComponent<IProps> {
+export default class RowView extends React.PureComponent<Props> {
   public render() {
     const { timeEntry, disabled } = this.props;
     const { duration = 0 } = timeEntry;
@@ -27,11 +27,13 @@ export default class RowView extends React.PureComponent<IProps> {
       },
       this.props.style
     );
+    /**
     const activity = timeEntry.activityId
       ? this.props.activityList.find(
           act => String(act.id) === timeEntry.activityId
         )
       : null;
+     **/
 
     const icon = timeEntry.taskId ? '⏱' : '';
     const timeStamp = new Date(timeEntry.timestamp).toLocaleTimeString([], {
@@ -109,7 +111,7 @@ export default class RowView extends React.PureComponent<IProps> {
   }
 
   private renderRedminePart(
-    timeEntry: ITimeEntry
+    timeEntry: TimeEntry
   ) {
     if (!timeEntry.externalData) {
       return null;

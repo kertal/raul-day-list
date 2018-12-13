@@ -1,9 +1,9 @@
-import {ITask, ITimeEntry} from '../react-app-env';
+import {Task, TimeEntry} from '../react-app-env';
 
 
 export function sumDurationByTaskId(
-  docs: ITimeEntry[]
-): Map<string, ITask> {
+  docs: TimeEntry[]
+): Map<string, Task> {
   return docs.reduce((acc, timeEntry) => {
     if (!timeEntry.taskId || typeof timeEntry.duration !== 'number') {
       return acc;

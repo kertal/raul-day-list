@@ -1,25 +1,24 @@
 // note: refactoring of the Task Select used in RowEdit for better modularisation
-
 import * as React from 'react';
 import Select from 'react-select/lib/Creatable';
 import { ValueType } from 'react-select/lib/types';
-import { ITask, ITimeEntry } from '../react-app-env';
+import { Task, TimeEntry } from '../react-app-env';
 
-interface IProps {
+interface Props {
   onChangeTask: (task: any) => void;
-  task?: ITask;
-  taskList: ITask[];
-  timeEntry: ITimeEntry;
+  task?: Task;
+  taskList: Task[];
+  timeEntry: TimeEntry;
 }
 
-interface IState {
+interface State {
   activityId: string;
-  task?: ITask;
+  task?: Task;
   taskId: string;
   taskName: string;
 }
 
-export class TaskSelect extends React.Component<IProps, IState> {
+export class TaskSelect extends React.Component<Props, State> {
   public static defaultProps = {
     focusField: '',
     style: {},
@@ -28,7 +27,7 @@ export class TaskSelect extends React.Component<IProps, IState> {
     Select<{ label: string; value: string }>
   >();
 
-  constructor(props: IProps) {
+  constructor(props: Props) {
     super(props);
     const timeEntry = props.timeEntry || {};
 
@@ -133,7 +132,7 @@ export class TaskSelect extends React.Component<IProps, IState> {
       activityId: string;
       taskId: string;
       taskName: string;
-      task?: ITask;
+      task?: Task;
     } = {
       activityId: this.state.activityId,
       taskId: '',
