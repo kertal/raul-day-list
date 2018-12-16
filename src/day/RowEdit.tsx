@@ -99,22 +99,23 @@ export class RowEdit extends React.Component<Props, State> {
             taskList={this.props.taskList}
           />
           <input
-            style={{
-              margin: '2px 0 4px 0',
-              width: '100%',
-            }}
+            maxLength={255}
             onKeyDown={({ keyCode }) => {
               if (keyCode === 13) {
                 this.handleSaveClick();
               }
             }}
+            ref={this.commentInput}
             onChange={({ target }) => {
               this.setState({ comment: target.value });
             }}
             placeholder="Your comment"
-            value={this.state.comment}
+            style={{
+              margin: '2px 0 4px 0',
+              width: '100%',
+            }}
             type="text"
-            maxLength={255}
+            value={this.state.comment}
           />
           {this.renderActivitySelect()}
         </div>
