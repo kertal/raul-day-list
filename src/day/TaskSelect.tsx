@@ -101,7 +101,7 @@ export class TaskSelect extends React.PureComponent<Props> {
     if (actionMeta.action === 'create-option') {
       this.props.onChangeTask('new', newValue.label.substring(0, 124));
     } else {
-      this.props.onChangeTask(newValue.value, '');
+      this.props.onChangeTask(newValue.value, newValue.label);
     }
   };
 }

@@ -2,17 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-
-import DayView from './day';
-import data from './data.json';
+import {App} from "./App";
 
 ReactDOM.render(
-  <DayView
-    activityList={data.activityList}
-    timeEntryList={data.timeEntryList}
-    taskList={data.taskList}
-    settings={data.settings}
-  />,
+  <App/>,
   document.getElementById('root')
 );
 

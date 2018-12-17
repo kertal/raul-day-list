@@ -2,7 +2,7 @@
 import * as React from 'react';
 import css from './styles.module.css';
 import { Button } from '../shared/Button';
-import { Activity, Task, TimeEntry, TimeEntryPersist } from '../react-app-env';
+import { Activity, Task, TimeEntry } from '../react-app-env';
 import { TaskSelect } from './TaskSelect';
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
   onChangeTask?: (taskId: string) => Task;
   onRemoveClick?: () => void;
   onSaveClick: (
-    newTimeEntry: TimeEntryPersist,
+    newTimeEntry: TimeEntry,
     prevTimeEntry: TimeEntry
   ) => void;
   task?: Task;
@@ -46,7 +46,7 @@ export class RowEdit extends React.Component<Props, State> {
       comment: timeEntry.comment || '',
       task: props.task,
       taskId: timeEntry.taskId ? timeEntry.taskId : '',
-      taskName: '',
+      taskName: timeEntry.taskName ? timeEntry.taskName : '',
       timestamp: timeEntry.timestamp,
     };
   }
@@ -161,20 +161,15 @@ export class RowEdit extends React.Component<Props, State> {
   private async handleSaveClick() {
     const { timeEntry } = this.props;
 
-    const newTimeEntry = {
+    const newTimeEntry = Object.assign({}, timeEntry,  {
       _id: timeEntry._id,
       activityId: String(this.state.activityId),
       comment: this.state.comment,
-      taskId: '',
-      taskName: '',
+      taskId: this.state.taskId,
+      taskName: this.state.taskName,
       timestamp: this.state.timestamp,
-    };
+    });
 
-    if (this.state.taskId === 'new') {
-      newTimeEntry.taskName = this.state.taskName;
-    } else {
-      newTimeEntry.taskId = this.state.taskId;
-    }
     this.props.onSaveClick(newTimeEntry, timeEntry);
   }
 

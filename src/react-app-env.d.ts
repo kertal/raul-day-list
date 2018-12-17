@@ -27,15 +27,6 @@ declare interface TimeEntry {
   timestamp: string;
 }
 
-export interface TimeEntryPersist {
-  _id: string;
-  activityId: string;
-  comment: string;
-  taskId: string;
-  taskName: string;
-  timestamp: string;
-}
-
 declare interface UserSettingsProps {
   redmineEnabled?: boolean;
   redmineUri?: string;

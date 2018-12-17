@@ -14,6 +14,7 @@ import { RowEdit } from './RowEdit';
 interface Props {
   activityList: Activity[];
   date: number;
+  onSaveTimeEntry: (timeEntry: TimeEntry) => Promise<TimeEntry>;
   settings: UserSettingsProps;
   taskList: Task[];
   timeEntryList: TimeEntry[];
@@ -107,8 +108,14 @@ export class List extends React.Component<Props, State> {
         activityList={this.props.activityList}
         focusField={this.state.editFocusFieldId}
         key={`rowEdit${timeEntry._id}`}
-        onSaveClick={() => {
-          this.setState(() => ({ editId: '' }));
+        onSaveClick={async (newTimeEntry) => {
+          try{
+            await this.props.onSaveTimeEntry(newTimeEntry);
+            this.setState(() => ({ editId: '' }));
+            return Promise.resolve();
+          } catch(e) {
+            return Promise.reject(e)
+          }
         }}
         taskList={this.props.taskList}
         timeEntry={timeEntry}
