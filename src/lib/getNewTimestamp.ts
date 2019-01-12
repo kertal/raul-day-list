@@ -1,21 +1,16 @@
-import {TimeEntry} from '../react-app-env';
+import { TimeEntry } from '../react-app-env';
 
 /**
  * returns initial timestamp of a new time entry
  * if configured, minutes are adapted to the defaultTimeUnitInMin value
- * reason: not everyone wants the accuracy of a single minute in his workflow
- * @param date
- * @param timeEntryList[]
- * @param defaultTimeUnitInMin - if higher than 1 the minutes of the returned timestamp are adapted
- * @param nowTime - just for testing
- * @returns {number}
+ * Reason: not everyone wants the accuracy of a single minute in his workflow
  */
 export function getNewTimestamp(
   date: number,
   timeEntryList: TimeEntry[] = [],
   defaultTimeUnitInMin: number = 1,
   nowTime: number = 0
-) {
+): string {
   const now = nowTime ? new Date(nowTime) : new Date();
   const previousEntry = timeEntryList[timeEntryList.length - 1];
   const previousEntryTimestamp = previousEntry ? previousEntry.timestamp : 0;
@@ -24,7 +19,7 @@ export function getNewTimestamp(
   let minutes = now.getMinutes();
 
   if (minutes % defaultTimeUnitInMin >= 1) {
-    // depending on the configuted defaultTimeUnitInMin round minutes floor or ciel
+    // depending on the configured defaultTimeUnitInMin, round minutes floor or ceil
     minutes =
       previousEntry && previousEntry.taskId
         ? Math.ceil(minutes / defaultTimeUnitInMin) * defaultTimeUnitInMin

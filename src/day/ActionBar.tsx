@@ -1,15 +1,25 @@
 import * as React from 'react';
-import { Button } from '../shared/Button';
-import { TimeEntry } from '../react-app-env';
+import {Button} from '../shared/Button';
+import {TimeEntry} from '../react-app-env';
+import {getNewTimestamp} from '../lib/getNewTimestamp';
 
 interface Props {
+  date: number;
   disabled: boolean;
+  onAddTimeEntry: (type: string, timestamp: string, task?: string) => Promise<TimeEntry>;
   timeEntryList: TimeEntry[];
 }
 
 export class ActionBar extends React.PureComponent<Props> {
+  private handleAddTimeEntry(type: string, taskId: string = ''): Promise<TimeEntry> {
+    const {date, timeEntryList} = this.props;
+
+    const timestamp = getNewTimestamp(date, timeEntryList);
+    return this.props.onAddTimeEntry(type, timestamp, taskId);
+  }
+
   public render() {
-    const { timeEntryList } = this.props;
+    const {timeEntryList} = this.props;
     const lastEntry = timeEntryList[timeEntryList.length - 1];
     const lastEntryTaskId = lastEntry && lastEntry.taskId;
 
@@ -22,16 +32,16 @@ export class ActionBar extends React.PureComponent<Props> {
 
     return (
       <div style={style}>
-        <Button type="start" disabled onClick={() => void 0}>
+        <Button type="start" onClick={() => this.handleAddTimeEntry('new')}>
           {!lastEntryTaskId ? 'Start new Task' : 'Switch Task'}
         </Button>
         {lastEntryTaskId && (
-          <Button type="stop" disabled onClick={() => void 0}>
+          <Button type="stop" onClick={() => this.handleAddTimeEntry('stop')}>
             Stop Task
           </Button>
         )}
         {prevTaskId && (
-          <Button disabled onClick={() => void 0}>
+          <Button onClick={() => this.handleAddTimeEntry('continue', prevTaskId)}>
             Continue previous task
           </Button>
         )}
@@ -39,5 +49,3 @@ export class ActionBar extends React.PureComponent<Props> {
     );
   }
 }
-
-export default ActionBar;

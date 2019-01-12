@@ -2,13 +2,13 @@ import * as React from 'react';
 import css from './styles.module.css';
 import { formatDuration } from '../lib/formatDuration';
 import { Button } from '../shared/Button';
-import { Tag } from '../shared/Tag';
 import { Activity, TimeEntry, UserSettingsProps } from '../react-app-env';
 
 interface Props {
   activityList: Activity[];
   disabled: boolean;
   onEditClick: (id: string, focusId: string) => void;
+  onDeleteClick: (id: string) => Promise<boolean>;
   settings: UserSettingsProps;
   style?: React.StyleHTMLAttributes<any>;
   timeEntry: TimeEntry;
@@ -16,7 +16,7 @@ interface Props {
 
 export default class RowView extends React.PureComponent<Props> {
   public render() {
-    const { timeEntry, disabled } = this.props;
+    const { timeEntry, disabled, onEditClick, onDeleteClick } = this.props;
     const { duration = 0 } = timeEntry;
 
     const style = Object.assign(
@@ -27,26 +27,20 @@ export default class RowView extends React.PureComponent<Props> {
       },
       this.props.style
     );
-    /**
-    const activity = timeEntry.activityId
-      ? this.props.activityList.find(
-          act => String(act.id) === timeEntry.activityId
-        )
-      : null;
-     **/
 
-    const icon = timeEntry.taskId ? '⏱' : '';
+    const icon = timeEntry.taskId ? '⏱' : null;
     const timeStamp = new Date(timeEntry.timestamp).toLocaleTimeString([], {
       hour: '2-digit',
       minute: '2-digit',
     });
+    const tabIndex = this.props.disabled ? undefined : 0;
 
     return (
       <div className={css.row} key={timeEntry._id} style={style}>
         <div className={css.colIcon}>{icon}️</div>
         <div
           role="button"
-          tabIndex={0}
+          tabIndex={tabIndex}
           className={css.colTime}
           onClick={() => this.props.onEditClick(timeEntry._id, '')}
           onKeyDown={({ keyCode }) => {
@@ -63,12 +57,12 @@ export default class RowView extends React.PureComponent<Props> {
         <div className={css.colTask} style={{ paddingBottom: '8px' }}>
           <div
             role="button"
-            tabIndex={0}
+            tabIndex={tabIndex}
             className={css.cellOnClick}
-            onClick={() => this.props.onEditClick(timeEntry._id, 'task')}
+            onClick={() => onEditClick(timeEntry._id, 'task')}
             onKeyDown={({ keyCode }) => {
               if (keyCode === 13) {
-                this.props.onEditClick(timeEntry._id, 'task');
+                onEditClick(timeEntry._id, 'task');
               }
             }}
           >
@@ -77,14 +71,12 @@ export default class RowView extends React.PureComponent<Props> {
           {timeEntry.comment && (
             <div
               role="button"
-              tabIndex={0}
+              tabIndex={tabIndex}
               className={css.cellOnClick}
-              onClick={() => this.props.onEditClick(timeEntry._id, 'comment')}
-              onKeyDown={({ keyCode }) => {
-                if (keyCode === 13) {
-                  this.props.onEditClick(timeEntry._id, 'comment');
-                }
-              }}
+              onClick={() => onEditClick(timeEntry._id, 'comment')}
+              onKeyDown={({ keyCode }) =>
+                keyCode === 13 && onEditClick(timeEntry._id, 'comment')
+              }
               style={{
                 color: '#999',
                 padding: '2px 0 3px 3px',
@@ -93,42 +85,19 @@ export default class RowView extends React.PureComponent<Props> {
               {timeEntry.comment}
             </div>
           )}
-          {this.renderRedminePart(timeEntry)}
         </div>
         <div className={css.colAction}>
-          <Button
-            type="edit"
-            onClick={() => this.props.onEditClick(timeEntry._id, '')}
-          >
+          <Button type="edit" onClick={() => onEditClick(timeEntry._id, '')}>
             Edit
           </Button>
-          <Button type="remove" disabled async onClick={() => void 0}>
+          <Button
+            type="remove"
+            async
+            onClick={() => onDeleteClick(timeEntry._id)}
+          >
             Remove
           </Button>
         </div>
-      </div>
-    );
-  }
-
-  private renderRedminePart(
-    timeEntry: TimeEntry
-  ) {
-    if (!timeEntry.externalData) {
-      return null;
-    }
-
-    return (
-      <div>
-        <Tag>
-          Redmine #
-          {timeEntry.externalData.issueId}
-        </Tag>
-        {timeEntry.externalData.syncError && (
-          <div style={{ color: 'red', padding: '5px' }}>
-            {timeEntry.externalData.syncError}
-            Please change the activity for successful syncing to redmine!
-          </div>
-        )}
       </div>
     );
   }

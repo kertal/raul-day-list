@@ -2,18 +2,15 @@ import * as React from 'react';
 import css from './styles.module.css';
 import { ActionBar } from './ActionBar';
 import RowSum from './RowSum';
-import {
-  Activity,
-  Task,
-  TimeEntry,
-  UserSettingsProps,
-} from '../react-app-env';
+import { Activity, Task, TimeEntry, UserSettingsProps } from '../react-app-env';
 import RowView from './RowView';
 import { RowEdit } from './RowEdit';
 
 interface Props {
   activityList: Activity[];
   date: number;
+  onAddTimeEntry: (timestamp: string, taskId?: string) => Promise<TimeEntry>;
+  onDeleteTimeEntry: (id: string) => Promise<boolean>;
   onSaveTimeEntry: (timeEntry: TimeEntry) => Promise<TimeEntry>;
   settings: UserSettingsProps;
   taskList: Task[];
@@ -50,15 +47,31 @@ export class List extends React.Component<Props, State> {
         </div>
         <div className={css.body}>
           {timeEntryList.map(timeEntry => this.renderRow(timeEntry))}
-          <div className={css.row}>
-            <ActionBar
-              disabled={!!this.state.editId}
-              timeEntryList={timeEntryList}
-            />
-          </div>
+          <div className={css.row}>{this.renderActionBar(timeEntryList)}</div>
         </div>
         <RowSum timeEntryList={this.props.timeEntryList} />
       </div>
+    );
+  }
+
+  private renderActionBar(list: TimeEntry[]) {
+    return (
+      <ActionBar
+        date={this.props.date}
+        disabled={!!this.state.editId}
+        onAddTimeEntry={async (
+          type: string,
+          timestamp: string,
+          taskId?: string
+        ) => {
+          const result = await this.props.onAddTimeEntry(timestamp, taskId);
+          if (type !== 'stop') {
+            this.setState(() => ({ editId: result._id }));
+          }
+          return result;
+        }}
+        timeEntryList={list}
+      />
     );
   }
 
@@ -68,17 +81,14 @@ export class List extends React.Component<Props, State> {
         <div className={`${css.row} ${css.rowNoActivities}`}>
           There are no activities logged for this day.
         </div>
-        <div className={css.row}>
-          <ActionBar disabled={!!this.state.editId} timeEntryList={[]} />
-        </div>
+        <div className={css.row}>{this.renderActionBar([])}</div>
       </div>
     );
   }
 
   private renderRow(timeEntry: TimeEntry) {
-    const edit = this.state.editId && this.state.editId === timeEntry._id;
 
-    if (edit) {
+    if (this.state.editId === timeEntry._id) {
       return this.renderEditRow(timeEntry);
     } else {
       return this.renderViewRow(timeEntry);
@@ -86,16 +96,20 @@ export class List extends React.Component<Props, State> {
   }
 
   private renderViewRow(timeEntry: TimeEntry) {
-    const disabled = !!this.state.editId && this.state.editId !== timeEntry._id;
-    const handleEditClick = (id: string, focusId: string) =>
-      this.setState(() => ({ editId: id, editFocusFieldId: focusId }));
+    const {editId} = this.state;
 
     return (
       <RowView
         activityList={this.props.activityList}
-        disabled={disabled}
+        disabled={!!editId && editId !== timeEntry._id}
         key={`rowView${timeEntry._id}`}
-        onEditClick={handleEditClick}
+        onEditClick={(id: string, focusId: string) =>
+          this.setState(() => ({
+            editId: id,
+            editFocusFieldId: focusId,
+          }))
+        }
+        onDeleteClick={(id: string) => this.props.onDeleteTimeEntry(id)}
         settings={this.props.settings}
         timeEntry={timeEntry}
       />
@@ -108,13 +122,13 @@ export class List extends React.Component<Props, State> {
         activityList={this.props.activityList}
         focusField={this.state.editFocusFieldId}
         key={`rowEdit${timeEntry._id}`}
-        onSaveClick={async (newTimeEntry) => {
-          try{
+        onSaveClick={async newTimeEntry => {
+          try {
             await this.props.onSaveTimeEntry(newTimeEntry);
             this.setState(() => ({ editId: '' }));
             return Promise.resolve();
-          } catch(e) {
-            return Promise.reject(e)
+          } catch (e) {
+            return Promise.reject(e);
           }
         }}
         taskList={this.props.taskList}
@@ -123,5 +137,3 @@ export class List extends React.Component<Props, State> {
     );
   }
 }
-
-export default List;

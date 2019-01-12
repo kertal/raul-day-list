@@ -6,6 +6,8 @@ import { Activity, Task, TimeEntry } from '../react-app-env';
 
 interface Props {
   activityList: Activity[];
+  onAddTimeEntry: (time: string, taskId?: string) => Promise<TimeEntry>;
+  onDeleteTimeEntry: (id: string) => Promise<boolean>;
   onSaveTimeEntry: (timeEntry: TimeEntry) => Promise<TimeEntry>;
   settings: {};
   taskList: Task[];
@@ -53,6 +55,8 @@ class Day extends React.Component<Props, State> {
         <List
           activityList={this.props.activityList}
           date={this.state.date}
+          onAddTimeEntry={this.props.onAddTimeEntry}
+          onDeleteTimeEntry={this.props.onDeleteTimeEntry}
           onSaveTimeEntry={this.props.onSaveTimeEntry}
           settings={this.props.settings}
           taskList={this.props.taskList}
