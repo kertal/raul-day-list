@@ -27,7 +27,9 @@ describe('sumDurationByTaskId', () => {
     const result = sumDurationByTaskId(entries);
     expect(result.size).toBe(2);
     expect(result.get('task-1')!.duration).toBe(2700);
+    expect(result.get('task-1')!.taskName).toBe('Task One');
     expect(result.get('task-2')!.duration).toBe(3600);
+    expect(result.get('task-2')!.taskName).toBe('Task Two');
   });
 
   it('excludes entries without a taskId', () => {

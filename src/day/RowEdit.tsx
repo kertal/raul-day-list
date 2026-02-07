@@ -2,13 +2,11 @@
 import * as React from 'react';
 import css from './styles.module.css';
 import { Button } from '../shared/Button';
-import { Activity, Task, TimeEntry } from '../react-app-env';
+import { Task, TimeEntry } from '../react-app-env';
 import { TaskSelect } from './TaskSelect';
 
 interface Props {
-  activityList: Activity[];
   focusField?: string;
-  onChangeTask?: (taskId: string) => Task;
   onRemoveClick?: () => void;
   onSaveClick: (
     newTimeEntry: TimeEntry,

@@ -1,6 +1,6 @@
 /// <reference types="react-scripts" />
 
-declare interface Task {
+export interface Task {
   _id: string;
   active: boolean;
   activityInput?: {
@@ -11,13 +11,11 @@ declare interface Task {
   duration?: number;
   name?: string;
   subject: string;
-  taskName?: string; // TODO: remove
   type: string;
 }
 
-declare interface TimeEntry {
+export interface TimeEntry {
   _id: string;
-  _rev?: string;
   activityId?: string;
   comment?: string;
   duration?: number;
@@ -27,7 +25,7 @@ declare interface TimeEntry {
   timestamp: string;
 }
 
-declare interface UserSettingsProps {
+export interface UserSettingsProps {
   redmineEnabled?: boolean;
   redmineUri?: string;
   redmineToken?: string;

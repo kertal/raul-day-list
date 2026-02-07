@@ -8,14 +8,16 @@ enum AsyncState {
   'ERROR',
 }
 
+type ButtonType = 'start' | 'save' | 'cancel' | 'delete' | 'edit' | 'remove' | 'stop' | '';
+
 interface IProps {
     async?: boolean;
     confirmMsg?: string;
-    disabled?: boolean
-    onClick: any;
+    disabled?: boolean;
+    onClick?: () => void | Promise<unknown>;
     small?: boolean;
-    type: string;
-    children: any;
+    type?: ButtonType;
+    children: React.ReactNode;
 }
 
 interface IState {
@@ -47,7 +49,7 @@ export class Button extends React.Component<IProps, IState> {
   }
 
   public render() {
-    const {type, small, disabled} = this.props;
+    const {type = '', small, disabled} = this.props;
 
     const style = {
       backgroundColor: this.getColor(type),
@@ -152,7 +154,7 @@ export class Button extends React.Component<IProps, IState> {
   private handleClickAsyncCallback = async () => {
 
     try {
-      await this.props.onClick();
+      await this.props.onClick!();
       if (this.ismounted) {
         this.setState({ asyncState: AsyncState.SUCCESS });
       }

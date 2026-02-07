@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import css from './Page.module.css';
 
 interface IProps {
-  children: any;
-  pathname: any;
-  headerRight: any;
+  children: React.ReactNode;
+  pathname: string;
+  headerRight: React.ReactNode;
 }
 
 /**

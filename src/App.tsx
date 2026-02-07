@@ -1,21 +1,17 @@
 import * as React from 'react';
 import Day from './day';
-import { Activity, Task, TimeEntry } from './react-app-env';
+import { Task, TimeEntry } from './react-app-env';
 import { Db } from './db';
 
 interface State {
-  activityList: Activity[];
-  settings: {};
   taskList: Task[];
   timeEntryList: TimeEntry[];
 }
 
 const db = new Db();
 
-export class App extends React.Component<any, State> {
+export class App extends React.Component<{}, State> {
   public state = {
-    activityList: [],
-    settings: {},
     taskList: db.taskList,
     timeEntryList: db.timeEntryList,
   };

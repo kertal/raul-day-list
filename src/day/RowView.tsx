@@ -2,15 +2,13 @@ import * as React from 'react';
 import css from './styles.module.css';
 import { formatDuration } from '../lib/formatDuration';
 import { Button } from '../shared/Button';
-import { Activity, TimeEntry, UserSettingsProps } from '../react-app-env';
+import { TimeEntry } from '../react-app-env';
 
 interface Props {
-  activityList: Activity[];
   disabled: boolean;
   onEditClick: (id: string, focusId: string) => void;
   onDeleteClick: (id: string) => Promise<boolean>;
-  settings: UserSettingsProps;
-  style?: React.StyleHTMLAttributes<any>;
+  style?: React.CSSProperties;
   timeEntry: TimeEntry;
 }
 
@@ -21,7 +19,6 @@ export default class RowView extends React.PureComponent<Props> {
 
     const style = Object.assign(
       {
-        backgroundColor: timeEntry.taskId ? '' : '',
         color: timeEntry.taskId ? '' : '#AAA',
         opacity: disabled ? 0.2 : 1,
       },

@@ -2,14 +2,12 @@ import * as React from 'react';
 import { DaySelect } from './DaySelect';
 import { List } from './List';
 import { Page } from '../shared/Page';
-import { Activity, Task, TimeEntry } from '../react-app-env';
+import { Task, TimeEntry } from '../react-app-env';
 
 interface Props {
-  activityList: Activity[];
   onAddTimeEntry: (time: string, taskId?: string) => Promise<TimeEntry>;
   onDeleteTimeEntry: (id: string) => Promise<boolean>;
   onSaveTimeEntry: (timeEntry: TimeEntry) => Promise<TimeEntry>;
-  settings: {};
   taskList: Task[];
   timeEntryList: TimeEntry[];
 }
@@ -49,12 +47,10 @@ class Day extends React.Component<Props, State> {
     return (
       <Page pathname={'/day'} headerRight={this.renderDaySelect()}>
         <List
-          activityList={this.props.activityList}
           date={this.state.date}
           onAddTimeEntry={this.props.onAddTimeEntry}
           onDeleteTimeEntry={this.props.onDeleteTimeEntry}
           onSaveTimeEntry={this.props.onSaveTimeEntry}
-          settings={this.props.settings}
           taskList={this.props.taskList}
           timeEntryList={timeEntryList}
         />

@@ -13,9 +13,6 @@ body {
   overflow: hidden;
 }
 
-#__next {
-  height: 100%;
-}
 input,
 select {
   font-family: Helvetica, Verdana, Helvetica Neue, Verdata, Arial, Helvetica,
