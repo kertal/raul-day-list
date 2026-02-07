@@ -157,7 +157,8 @@ export class Button extends React.Component<IProps, IState> {
         this.setState({ asyncState: AsyncState.SUCCESS });
       }
     } catch (e) {
-      this.setState({ asyncState: AsyncState.ERROR, errorMessage: e.message });
+      const message = e instanceof Error ? e.message : String(e);
+      this.setState({ asyncState: AsyncState.ERROR, errorMessage: message });
     }
 
     if (this.ismounted) {

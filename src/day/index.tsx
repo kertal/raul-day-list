@@ -20,11 +20,7 @@ interface State {
 
 class Day extends React.Component<Props, State> {
   public state = {
-    activityList: this.props.activityList,
     date: Date.now(),
-    settings: this.props.settings,
-    taskList: this.props.taskList,
-    timeEntryList: this.props.timeEntryList,
   };
 
   public render() {

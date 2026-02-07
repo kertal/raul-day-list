@@ -12,7 +12,7 @@ interface Props {
   onRemoveClick?: () => void;
   onSaveClick: (
     newTimeEntry: TimeEntry,
-    prevTimeEntry: TimeEntry
+    prevTimeEntry?: TimeEntry
   ) => void;
   task?: Task;
   taskList: Task[];
@@ -80,8 +80,8 @@ export class RowEdit extends React.Component<Props, State> {
             value={time}
             step="300"
             onChange={ev => this.handleTimeChange(ev)}
-            onKeyDown={({ keyCode }) => {
-              if (keyCode === 13) {
+            onKeyDown={({ key }) => {
+              if (key === 'Enter') {
                 this.handleSaveClick();
               }
             }}
@@ -100,8 +100,8 @@ export class RowEdit extends React.Component<Props, State> {
           />
           <input
             maxLength={255}
-            onKeyDown={({ keyCode }) => {
-              if (keyCode === 13) {
+            onKeyDown={({ key }) => {
+              if (key === 'Enter') {
                 this.handleSaveClick();
               }
             }}

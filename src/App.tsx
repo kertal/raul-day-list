@@ -34,65 +34,44 @@ export class App extends React.Component<any, State> {
     timestamp: string,
     taskId?: string
   ): Promise<TimeEntry> => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const timeEntrySaved = await db.addTimeEntry(timestamp, taskId);
-        const newState = {
+    const timeEntrySaved = await db.addTimeEntry(timestamp, taskId);
+    return new Promise(resolve => {
+      this.setState(
+        () => ({
           timeEntryList: db.timeEntryList,
           taskList: db.taskList,
-        };
-        this.setState(
-          () => newState,
-          () => {
-            resolve(timeEntrySaved);
-          }
-        );
-      } catch (e) {
-        reject(e);
-      }
+        }),
+        () => resolve(timeEntrySaved)
+      );
     });
   };
 
   private handleDeleteTimeEntry = async (
     id: string,
   ): Promise<boolean> => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const timeEntryDeleted = await db.deleteTimeEntryById(id);
-        const newState = {
+    const timeEntryDeleted = await db.deleteTimeEntryById(id);
+    return new Promise(resolve => {
+      this.setState(
+        () => ({
           timeEntryList: db.timeEntryList,
-        };
-        this.setState(
-          () => newState,
-          () => {
-            resolve(timeEntryDeleted);
-          }
-        );
-      } catch (e) {
-        reject(e);
-      }
+        }),
+        () => resolve(timeEntryDeleted)
+      );
     });
   };
 
   private handleSaveTimeEntry = async (
     timeEntry: TimeEntry
   ): Promise<TimeEntry> => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const timeEntrySaved = await db.saveTimeEntry(timeEntry);
-        const newState = {
+    const timeEntrySaved = await db.saveTimeEntry(timeEntry);
+    return new Promise(resolve => {
+      this.setState(
+        () => ({
           timeEntryList: db.timeEntryList,
           taskList: db.taskList,
-        };
-        this.setState(
-          () => (newState),
-          () => {
-            resolve(timeEntrySaved);
-          }
-        );
-      } catch (e) {
-        reject(e);
-      }
+        }),
+        () => resolve(timeEntrySaved)
+      );
     });
   };
 

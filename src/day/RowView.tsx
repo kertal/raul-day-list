@@ -43,8 +43,8 @@ export default class RowView extends React.PureComponent<Props> {
           tabIndex={tabIndex}
           className={css.colTime}
           onClick={() => this.props.onEditClick(timeEntry._id, '')}
-          onKeyDown={({ keyCode }) => {
-            if (keyCode === 13) {
+          onKeyDown={({ key }) => {
+            if (key === 'Enter') {
               this.props.onEditClick(timeEntry._id, '');
             }
           }}
@@ -60,8 +60,8 @@ export default class RowView extends React.PureComponent<Props> {
             tabIndex={tabIndex}
             className={css.cellOnClick}
             onClick={() => onEditClick(timeEntry._id, 'task')}
-            onKeyDown={({ keyCode }) => {
-              if (keyCode === 13) {
+            onKeyDown={({ key }) => {
+              if (key === 'Enter') {
                 onEditClick(timeEntry._id, 'task');
               }
             }}
@@ -74,8 +74,8 @@ export default class RowView extends React.PureComponent<Props> {
               tabIndex={tabIndex}
               className={css.cellOnClick}
               onClick={() => onEditClick(timeEntry._id, 'comment')}
-              onKeyDown={({ keyCode }) =>
-                keyCode === 13 && onEditClick(timeEntry._id, 'comment')
+              onKeyDown={({ key }) =>
+                key === 'Enter' && onEditClick(timeEntry._id, 'comment')
               }
               style={{
                 color: '#999',
