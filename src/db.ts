@@ -50,8 +50,8 @@ export class Db {
 
     if (
       dateStart.getFullYear() !== year ||
-      dateStart.getMonth() !== month + 1 ||
-      dateStart.getDay() !== day + 1
+      dateStart.getMonth() !== month ||
+      dateStart.getDate() !== day
     ) {
       return Promise.reject('Invalid Date');
     }
