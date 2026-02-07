@@ -1,9 +1,9 @@
 import * as React from 'react';
 import css from './styles.module.css';
-import { Task,TimeEntry} from '../react-app-env';
+import { TimeEntry } from '../react-app-env';
 import { formatDuration } from '../lib/formatDuration';
 import { sumDuration } from '../lib/sumDuration';
-import {sumDurationByTaskId} from '../lib/sumDurationsByTask';
+import { sumDurationByTaskId, TaskSummary } from '../lib/sumDurationsByTask';
 
 interface Props {
   timeEntryList: TimeEntry[];
@@ -47,11 +47,11 @@ export default class RowSum extends React.Component<Props, State> {
     );
   }
 
-  private renderDetails(sumByTask: Map<string, Task>) {
+  private renderDetails(sumByTask: Map<string, TaskSummary>) {
     return Array.from(sumByTask.values()).map(this.renderDetailsTask);
   }
 
-  private renderDetailsTask = (task: Task, idx: number) => (
+  private renderDetailsTask = (task: TaskSummary, idx: number) => (
     <div className={css.row} key={task._id}>
       <div className={css.colIcon}>
         {idx === 0 && (

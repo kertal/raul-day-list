@@ -48,14 +48,6 @@
     overflow-y: auto;
 }
 
-.col1 {
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 1px 3px;
-}
-
 .colDuration {
     white-space: nowrap;
     overflow: hidden;

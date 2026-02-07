@@ -2,15 +2,13 @@ import * as React from 'react';
 import css from './styles.module.css';
 import { formatDuration } from '../lib/formatDuration';
 import { Button } from '../shared/Button';
-import { Activity, TimeEntry, UserSettingsProps } from '../react-app-env';
+import { TimeEntry } from '../react-app-env';
 
 interface Props {
-  activityList: Activity[];
   disabled: boolean;
   onEditClick: (id: string, focusId: string) => void;
   onDeleteClick: (id: string) => Promise<boolean>;
-  settings: UserSettingsProps;
-  style?: React.StyleHTMLAttributes<any>;
+  style?: React.CSSProperties;
   timeEntry: TimeEntry;
 }
 
@@ -21,7 +19,6 @@ export default class RowView extends React.PureComponent<Props> {
 
     const style = Object.assign(
       {
-        backgroundColor: timeEntry.taskId ? '' : '',
         color: timeEntry.taskId ? '' : '#AAA',
         opacity: disabled ? 0.2 : 1,
       },
@@ -43,8 +40,8 @@ export default class RowView extends React.PureComponent<Props> {
           tabIndex={tabIndex}
           className={css.colTime}
           onClick={() => this.props.onEditClick(timeEntry._id, '')}
-          onKeyDown={({ keyCode }) => {
-            if (keyCode === 13) {
+          onKeyDown={({ key }) => {
+            if (key === 'Enter') {
               this.props.onEditClick(timeEntry._id, '');
             }
           }}
@@ -60,8 +57,8 @@ export default class RowView extends React.PureComponent<Props> {
             tabIndex={tabIndex}
             className={css.cellOnClick}
             onClick={() => onEditClick(timeEntry._id, 'task')}
-            onKeyDown={({ keyCode }) => {
-              if (keyCode === 13) {
+            onKeyDown={({ key }) => {
+              if (key === 'Enter') {
                 onEditClick(timeEntry._id, 'task');
               }
             }}
@@ -74,8 +71,8 @@ export default class RowView extends React.PureComponent<Props> {
               tabIndex={tabIndex}
               className={css.cellOnClick}
               onClick={() => onEditClick(timeEntry._id, 'comment')}
-              onKeyDown={({ keyCode }) =>
-                keyCode === 13 && onEditClick(timeEntry._id, 'comment')
+              onKeyDown={({ key }) =>
+                key === 'Enter' && onEditClick(timeEntry._id, 'comment')
               }
               style={{
                 color: '#999',

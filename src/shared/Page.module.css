@@ -46,10 +46,6 @@ App Header
     text-align: right;
 }
 
-.logo {
-    color: red;
-    font-weight: bold;
-}
 .circle {
     position: absolute;
     top: 1px;
@@ -67,10 +63,6 @@ App Header
     border: 2px solid #eee;
     box-shadow: 0 3px 2px rgba(0, 0, 0, 0.3);
 }
-.title {
-    padding-left: 23px;
-}
-
 /*
 App Main part
  */

@@ -1,21 +1,17 @@
 import * as React from 'react';
 import Day from './day';
-import { Activity, Task, TimeEntry } from './react-app-env';
+import { Task, TimeEntry } from './react-app-env';
 import { Db } from './db';
 
 interface State {
-  activityList: Activity[];
-  settings: {};
   taskList: Task[];
   timeEntryList: TimeEntry[];
 }
 
 const db = new Db();
 
-export class App extends React.Component<any, State> {
+export class App extends React.Component<{}, State> {
   public state = {
-    activityList: [],
-    settings: {},
     taskList: db.taskList,
     timeEntryList: db.timeEntryList,
   };
@@ -34,65 +30,44 @@ export class App extends React.Component<any, State> {
     timestamp: string,
     taskId?: string
   ): Promise<TimeEntry> => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const timeEntrySaved = await db.addTimeEntry(timestamp, taskId);
-        const newState = {
+    const timeEntrySaved = await db.addTimeEntry(timestamp, taskId);
+    return new Promise(resolve => {
+      this.setState(
+        () => ({
           timeEntryList: db.timeEntryList,
           taskList: db.taskList,
-        };
-        this.setState(
-          () => newState,
-          () => {
-            resolve(timeEntrySaved);
-          }
-        );
-      } catch (e) {
-        reject(e);
-      }
+        }),
+        () => resolve(timeEntrySaved)
+      );
     });
   };
 
   private handleDeleteTimeEntry = async (
     id: string,
   ): Promise<boolean> => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const timeEntryDeleted = await db.deleteTimeEntryById(id);
-        const newState = {
+    const timeEntryDeleted = await db.deleteTimeEntryById(id);
+    return new Promise(resolve => {
+      this.setState(
+        () => ({
           timeEntryList: db.timeEntryList,
-        };
-        this.setState(
-          () => newState,
-          () => {
-            resolve(timeEntryDeleted);
-          }
-        );
-      } catch (e) {
-        reject(e);
-      }
+        }),
+        () => resolve(timeEntryDeleted)
+      );
     });
   };
 
   private handleSaveTimeEntry = async (
     timeEntry: TimeEntry
   ): Promise<TimeEntry> => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const timeEntrySaved = await db.saveTimeEntry(timeEntry);
-        const newState = {
+    const timeEntrySaved = await db.saveTimeEntry(timeEntry);
+    return new Promise(resolve => {
+      this.setState(
+        () => ({
           timeEntryList: db.timeEntryList,
           taskList: db.taskList,
-        };
-        this.setState(
-          () => (newState),
-          () => {
-            resolve(timeEntrySaved);
-          }
-        );
-      } catch (e) {
-        reject(e);
-      }
+        }),
+        () => resolve(timeEntrySaved)
+      );
     });
   };
 

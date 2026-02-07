@@ -2,17 +2,15 @@ import * as React from 'react';
 import css from './styles.module.css';
 import { ActionBar } from './ActionBar';
 import RowSum from './RowSum';
-import { Activity, Task, TimeEntry, UserSettingsProps } from '../react-app-env';
+import { Task, TimeEntry } from '../react-app-env';
 import RowView from './RowView';
 import { RowEdit } from './RowEdit';
 
 interface Props {
-  activityList: Activity[];
   date: number;
   onAddTimeEntry: (timestamp: string, taskId?: string) => Promise<TimeEntry>;
   onDeleteTimeEntry: (id: string) => Promise<boolean>;
   onSaveTimeEntry: (timeEntry: TimeEntry) => Promise<TimeEntry>;
-  settings: UserSettingsProps;
   taskList: Task[];
   timeEntryList: TimeEntry[];
 }
@@ -100,7 +98,6 @@ export class List extends React.Component<Props, State> {
 
     return (
       <RowView
-        activityList={this.props.activityList}
         disabled={!!editId && editId !== timeEntry._id}
         key={`rowView${timeEntry._id}`}
         onEditClick={(id: string, focusId: string) =>
@@ -110,7 +107,6 @@ export class List extends React.Component<Props, State> {
           }))
         }
         onDeleteClick={(id: string) => this.props.onDeleteTimeEntry(id)}
-        settings={this.props.settings}
         timeEntry={timeEntry}
       />
     );
@@ -119,7 +115,6 @@ export class List extends React.Component<Props, State> {
   private renderEditRow(timeEntry: TimeEntry) {
     return (
       <RowEdit
-        activityList={this.props.activityList}
         focusField={this.state.editFocusFieldId}
         key={`rowEdit${timeEntry._id}`}
         onSaveClick={async newTimeEntry => {

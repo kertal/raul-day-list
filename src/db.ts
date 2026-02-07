@@ -21,9 +21,6 @@ export class Db {
 
   /**
    * calc delta of 2 timestamps in seconds, returns -1 if that's not possible
-   * @param start
-   * @param end
-   * @returns {number}
    */
   private static calcDuration(start?: string, end?: string): number {
     if (start && end) {
@@ -34,11 +31,16 @@ export class Db {
     return -1;
   }
 
-  public getTimeEntryList(): Promise<TimeEntry[]> {
-    const timeList = this.timeEntryList.sort((a, b) => {
-      return a.timestamp > b.timestamp ? 1 : -1;
+  private static sortByTimestamp(list: TimeEntry[]): TimeEntry[] {
+    return list.slice().sort((a, b) => {
+      if (a.timestamp < b.timestamp) { return -1; }
+      if (a.timestamp > b.timestamp) { return 1; }
+      return 0;
     });
-    return Promise.resolve(timeList);
+  }
+
+  public getTimeEntryList(): Promise<TimeEntry[]> {
+    return Promise.resolve(Db.sortByTimestamp(this.timeEntryList));
   }
 
   public async getTimeEntryListByDay(
@@ -50,8 +52,8 @@ export class Db {
 
     if (
       dateStart.getFullYear() !== year ||
-      dateStart.getMonth() !== month + 1 ||
-      dateStart.getDay() !== day + 1
+      dateStart.getMonth() !== month ||
+      dateStart.getDate() !== day
     ) {
       return Promise.reject('Invalid Date');
     }
@@ -78,11 +80,9 @@ export class Db {
     return newTask;
   }
 
-  public async getTaskNameById(taskId : string) {
-    const task = this.taskList.find(e =>
-       e._id === taskId
-    );
-   return Promise.resolve(task ? task.subject : '');
+  public async getTaskNameById(taskId: string): Promise<string> {
+    const task = this.taskList.find(e => e._id === taskId);
+    return task ? task.subject : '';
   }
 
   public async addTimeEntry(
@@ -90,29 +90,28 @@ export class Db {
     taskId?: string
   ): Promise<TimeEntry> {
 
-    const taskName =  taskId ? await this.getTaskNameById(taskId) :'';
+    const taskName = taskId ? await this.getTaskNameById(taskId) : '';
 
     const newEntry: TimeEntry = {
       _id: generateUuid(),
       comment: '',
       duration: 0,
       taskId: taskId || '',
-      taskName: taskName,
-      timestamp: timestamp,
+      taskName,
+      timestamp,
     };
 
     await this.saveTimeEntry(newEntry, true);
 
-    return Promise.resolve(newEntry);
+    return newEntry;
   }
 
   private async getTimeEntryById(id: string): Promise<TimeEntry> {
     const timeEntry = this.timeEntryList.find(te => te._id === id);
     if (timeEntry) {
-      return Promise.resolve(timeEntry);
-    } else {
-      return Promise.reject(`No time entry available with id ${id}`);
+      return timeEntry;
     }
+    return Promise.reject(`No time entry available with id ${id}`);
   }
 
   /**
@@ -121,10 +120,10 @@ export class Db {
   private async getPrevAndNextTimeEntry(
     timeEntry: TimeEntry
   ): Promise<PrevNextTimeEntry> {
-    const timeEntryList = await this.getTimeEntryList();
+    const sorted = await this.getTimeEntryList();
     const result: PrevNextTimeEntry = {};
 
-    timeEntryList.some(e => {
+    sorted.some(e => {
       if (e._id !== timeEntry._id) {
         if (e.timestamp <= timeEntry.timestamp) {
           result.prev = e;
@@ -142,48 +141,51 @@ export class Db {
    * persist given timeEntry, updates duration of related time entries
    */
   public async saveTimeEntry(timeEntry: TimeEntry, add: boolean = false): Promise<TimeEntry> {
-    const docsToUpdate = [];
-    if(!add) {
-      const entryInDb = await this.getTimeEntryById(timeEntry._id);
+    // Work on a copy to avoid mutating the caller's object
+    const entry = { ...timeEntry };
+    const docsToUpdate: TimeEntry[] = [];
 
-      if (timeEntry.taskId === 'new' && timeEntry.taskName) {
-        const task = await this.addTask(timeEntry.taskName);
-        timeEntry.taskId = task._id;
+    if (!add) {
+      const entryInDb = await this.getTimeEntryById(entry._id);
+
+      if (entry.taskId === 'new' && entry.taskName) {
+        const task = await this.addTask(entry.taskName);
+        entry.taskId = task._id;
       }
 
-      // change the time entry of the timeEntries previous entry
-      // given the new timestamp is lt the previous entry, or gt the next entry
-      // so the user set a timestamp out of the range between the persists prev/next entries
+      // If the timestamp moved outside the range of its original neighbors,
+      // recalculate the predecessor's duration to bridge the gap
       const {
         prev: prevInDb,
         next: nextInDb,
       } = await this.getPrevAndNextTimeEntry(entryInDb);
 
-      if (prevInDb && (prevInDb.timestamp > timeEntry.timestamp || (nextInDb && nextInDb.timestamp < timeEntry.timestamp))) {
-        prevInDb.duration = (prevInDb && nextInDb) ? Db.calcDuration(
+      if (prevInDb && (prevInDb.timestamp > entry.timestamp || (nextInDb && nextInDb.timestamp < entry.timestamp))) {
+        const updatedPrev = { ...prevInDb };
+        updatedPrev.duration = (prevInDb && nextInDb) ? Db.calcDuration(
           prevInDb.timestamp,
           nextInDb.timestamp
         ) : -1;
-        docsToUpdate.push(prevInDb);
+        docsToUpdate.push(updatedPrev);
       }
     }
 
-
-    const { prev, next } = await this.getPrevAndNextTimeEntry(timeEntry);
+    const { prev, next } = await this.getPrevAndNextTimeEntry(entry);
     if (prev) {
-      prev.duration = Db.calcDuration(prev.timestamp, timeEntry.timestamp);
-      docsToUpdate.push(prev);
+      const updatedPrev = { ...prev };
+      updatedPrev.duration = Db.calcDuration(prev.timestamp, entry.timestamp);
+      docsToUpdate.push(updatedPrev);
     }
 
-    timeEntry.duration = next
-      ? Db.calcDuration(timeEntry.timestamp, next.timestamp)
+    entry.duration = next
+      ? Db.calcDuration(entry.timestamp, next.timestamp)
       : -1;
 
     let timeEntryList = this.timeEntryList;
-    if(add) {
-      timeEntryList = timeEntryList.concat(timeEntry);
+    if (add) {
+      timeEntryList = timeEntryList.concat(entry);
     } else {
-      docsToUpdate.push(timeEntry);
+      docsToUpdate.push(entry);
     }
 
     docsToUpdate.forEach(e => {
@@ -193,36 +195,32 @@ export class Db {
       });
     });
 
-    this.timeEntryList = timeEntryList.sort((a,b) => {
-      return a.timestamp > b.timestamp ? 1 : -1
-    });
+    this.timeEntryList = Db.sortByTimestamp(timeEntryList);
 
-    return Promise.resolve(timeEntry);
+    // Copy mutations back to the caller's object so it stays in sync
+    Object.assign(timeEntry, entry);
+
+    return entry;
   }
 
   public async deleteTimeEntryById(id: string): Promise<boolean> {
-    let timeEntryList = this.timeEntryList;
-
     const timeEntry = await this.getTimeEntryById(id);
-    if (!timeEntry) {
-      return Promise.reject(`No timeEntry with the given id ${id}`);
-    }
 
     const { prev } = await this.getPrevAndNextTimeEntry(timeEntry);
     if (prev) {
-      prev.duration =
+      const updatedPrev = { ...prev };
+      updatedPrev.duration =
         timeEntry.duration && timeEntry.duration > 0
           ? (prev.duration || 0) + timeEntry.duration
           : -1;
 
-      const indexToReplace = timeEntryList.findIndex(te => te._id === prev._id);
-      timeEntryList = Object.assign([], timeEntryList, {
-        [indexToReplace]: prev,
+      const indexToReplace = this.timeEntryList.findIndex(te => te._id === prev._id);
+      this.timeEntryList = Object.assign([], this.timeEntryList, {
+        [indexToReplace]: updatedPrev,
       });
     }
 
-    this.timeEntryList = timeEntryList
-      .filter(te => te._id !== id);
-    return Promise.resolve(true);
+    this.timeEntryList = this.timeEntryList.filter(te => te._id !== id);
+    return true;
   }
 }

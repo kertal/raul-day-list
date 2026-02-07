@@ -2,17 +2,15 @@
 import * as React from 'react';
 import css from './styles.module.css';
 import { Button } from '../shared/Button';
-import { Activity, Task, TimeEntry } from '../react-app-env';
+import { Task, TimeEntry } from '../react-app-env';
 import { TaskSelect } from './TaskSelect';
 
 interface Props {
-  activityList: Activity[];
   focusField?: string;
-  onChangeTask?: (taskId: string) => Task;
   onRemoveClick?: () => void;
   onSaveClick: (
     newTimeEntry: TimeEntry,
-    prevTimeEntry: TimeEntry
+    prevTimeEntry?: TimeEntry
   ) => void;
   task?: Task;
   taskList: Task[];
@@ -80,8 +78,8 @@ export class RowEdit extends React.Component<Props, State> {
             value={time}
             step="300"
             onChange={ev => this.handleTimeChange(ev)}
-            onKeyDown={({ keyCode }) => {
-              if (keyCode === 13) {
+            onKeyDown={({ key }) => {
+              if (key === 'Enter') {
                 this.handleSaveClick();
               }
             }}
@@ -100,8 +98,8 @@ export class RowEdit extends React.Component<Props, State> {
           />
           <input
             maxLength={255}
-            onKeyDown={({ keyCode }) => {
-              if (keyCode === 13) {
+            onKeyDown={({ key }) => {
+              if (key === 'Enter') {
                 this.handleSaveClick();
               }
             }}
